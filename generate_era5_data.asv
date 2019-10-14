@@ -15,13 +15,12 @@ clearvars
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Settings.DataDir     = [LocalDataDir,'/ERA5'];
-Settings.TimeScale   = datenum(2002,6,1):1:datenum(2002,11,1);
+Settings.TimeScale   = datenum(2002,1,[180,181]);
 Settings.HourScale   = 0:6:18;
-Settings.LatScale    = -90:2.5:-40;
-Settings.LonScale    = -180:5:180;
+Settings.LatScale    = -90:3:-40;
+Settings.LonScale    = -180:6:180;
 Settings.HeightScale = 0:5:60; 
 Settings.Vars        = {'u','v'};
-Settings.OutFile     = 'era5_winds.mat';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% setup of stuff
@@ -45,7 +44,6 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 
 for iDay=1:1:numel(Settings.TimeScale)
-  disp(datestr(Settings.TimeScale(iDay)))
   
   %load file
   EcmwfFile = era5_path(Settings.TimeScale(iDay));
@@ -80,21 +78,9 @@ for iDay=1:1:numel(Settings.TimeScale)
                             0:3:21}, ...
                            Data.(Settings.Vars{iVar}));
     I = I(a,b,c,d);
-    Field = Results.(Settings.Vars{iVar});
-    Field(iDay,:,:,:,:) = permute(I,[4,3,1,2]);
-    Results.(Settings.Vars{iVar}) = Field;
-  end
-  clear iVar I Field
+    s
+
+  for iVar=1:1:numel(Settings.Vars)
                    
-  %save every so often
-  if mod(iDay,20) == 0;
-    save(Settings.OutFile,'Results','Settings');
-    disp('Saved!')
-  end
-  
   
 end
-clear iDay a b c d
-
-save(Settings.OutFile,'Results','Settings');
-disp('Saved!')
